@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <script type="text/javascript" src="assets/js/bootstrap.js"></script>
+    <script type="text/javascript" src="assets/js/main.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<section id="calendarSection" class="container">
+        <div class="row">
+        
+        <script>
+                
+                $('#sub1').click(function()
+                {
+                    var inputYear = document.getElementById('inputYear').value;
+                    var result="";   //сюда запишу все таблицы
+
+                    var month_name=["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+                    for(var g = 0; g<12; g++)
+                    {
+
+                        var D1 = new Date(month_name[g] + ', 1,' + inputYear);
+                        
+                        D1Nfirst = new Date(D1.getFullYear(),D1.getMonth(),1).getDay(); // день недели первого дня месяца
+                        D1last = new Date(D1.getFullYear(),D1.getMonth()+1,0).getDate(); // сколько дней в месяце
+                        D1Nlast = new Date(D1.getFullYear(),D1.getMonth(),D1last).getDay(); // день недели последнего дня месяца
+
+                        result += ("<div class='col-md-4'><table class='table table-bordered' id='monthTable" + g + "'><tr>" + month_name[g] + "</tr>" + "<tr><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr><tr>");
+
+                        if(D1Nfirst == 0)    //если первый день это воскресенье, то нужно 6 пустых ячеек
+                            {
+                              result += ("<td></td><td></td><td></td><td></td><td></td><td></td>");
+                            }
+                        if(D1Nfirst != 0)
+                            {
+                              for(var g1 = 1; g1 < D1Nfirst; g1++)
+                              {
+                                result += ("<td></td>");
+                              }
+                            }
+
+                        for(var g2=1; g2 <= D1last; g2++)
+                        {
+                        
+                            var thisDate = new Date(D1.getFullYear(),D1.getMonth(),g2).getDay();
+                            
+                            if (thisDate == 1) 
+                            {  // если день выпадает на понедельник, то открыть строку
+                                result += ("<tr>" + "<td class='SelectDate' id='" + g2 + "." + g + "." + inputYear + "'>" + g2 + "</td>");
+                            }
+                            if (thisDate == 0) 
+                            {  // если день выпадает на воскресенье, то закрыть строку                               
+                                result += ("<td class='SelectDate' id='" + g2 + "." + g + "." + inputYear + "'>" + g2 + "</td>" + "</tr>");
+                            }
+                            if ((thisDate > 1) && (thisDate < 7))
+                            {  //если это не пн и не вс, то продолжить запись
+                                result += ("<td class='SelectDate' id='" + g2 + "." + g + "." + inputYear + "'>" + g2 + "</td>");
+                            }
+                        }
+                        if(D1Nlast != 0)  //если последний день месяца не вс, то заполнить пустые ячейки
+                        {
+                          for(var g3 = D1Nlast; g3 < 7; g3++)
+                          {
+                            result += ("<td></td>");
+                          }
+                        }
+
+                        result += "</tr></table></div>";
+                    }
+
+                    $('#calendarSection > .row').append(result);
+
+                });
+                
+        </script>
+        
+        </div>
+</section>
+
+</body>
+</html>
